@@ -8,22 +8,36 @@ int precedence(char op)
         return 1;
     if (op == '*' || op == '/')
         return 2;
+    if (op == '^')
+        return 3;
     return 0;
 }
 string infix_to_postfix(string &infix)
 {
-    Stack operators(55); // chars
+    Stack operators; // chars
     string postfix;
 
     for (int i = 0; i < infix.size(); i++)
     {
-        if (isdigit(infix[i])||isalpha(infix[i]))
+        if (isdigit(infix[i]) || isalpha(infix[i]))
             postfix += infix[i];
-        else
-        {
-            while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(infix[i]))
-            {
 
+        else if (infix[i] == '(')
+            operators.push(infix[i]);
+
+        else if (infix[i] == ')')
+        {
+            while (operators.peek() != '(')
+            {
+                postfix += operators.pop();
+            }
+            operators.pop();
+        }
+        else
+            // 2^3^4 -->>> 23^4^ wrong
+        {   // 2^3^4 -->>> 234^^ right
+            while (!operators.isEmpty() && (precedence(operators.peek()) > precedence(infix[i]) || precedence(operators.peek()) == precedence(infix[i]) && infix[i] != '^'))
+            {
                 postfix += operators.pop();
             }
             operators.push(infix[i]);

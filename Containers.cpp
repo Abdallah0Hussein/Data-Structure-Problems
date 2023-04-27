@@ -50,6 +50,10 @@ private:
     int *array;
 
 public:
+    Stack() : size(0), top(-1)
+    {
+        array = new int[size];
+    }
     Stack(int size) : size(size), top(-1)
     {
         array = new int[size];
@@ -517,20 +521,20 @@ void D_Linked_List::print()
     }
 }
 
-int main()
-{
-    D_Linked_List list;
-    // list.insert_end(5);
-    // list.insert_end(4);
-    // list.insert_end(3);
-    list.insert_front(4);
-    list.insert_front(3);
-    list.insert_front(2);
-    // list.insertion(1, 1);
-    // list.insertion(3, 2);
-    // list.delete_end();
-    // list.delete_front();
-    // list.delete_val(3);
-    // list.reverse();
-    list.print();
-}
+// int main()
+// {
+//     D_Linked_List list;
+//     // list.insert_end(5);
+//     // list.insert_end(4);
+//     // list.insert_end(3);
+//     list.insert_front(4);
+//     list.insert_front(3);
+//     list.insert_front(2);
+//     // list.insertion(1, 1);
+//     // list.insertion(3, 2);
+//     // list.delete_end();
+//     // list.delete_front();
+//     // list.delete_val(3);
+//     // list.reverse();
+//     list.print();
+// }

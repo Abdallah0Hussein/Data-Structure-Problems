@@ -35,7 +35,7 @@ string infix_to_postfix(string &infix)
         }
         else
         // 2^3^4 -->>> 23^4^ wrong
-        { // 2^3^4 -->>> 234^^ right
+        { // 2^3^4 -->>> 234^^ right as 2^3^4 = 2^(3^4) in Mathematics
             while (!operators.isEmpty() && (precedence(operators.top()) > precedence(infix[i]) || precedence(operators.top()) == precedence(infix[i]) && infix[i] != '^'))
             {
                 postfix += operators.pop();
@@ -52,6 +52,13 @@ string infix_to_postfix(string &infix)
 int main()
 {
     string x;
-    cin >> x;
-    cout << infix_to_postfix(x);
+    getline(cin, x); // getline as cin takes the input when typing any space
+    string x_withoutSpace = "";
+    for (const char &i : x) //& to avoid creating the copying of the character for each iteration
+    {
+        if (i == ' ')
+            continue;
+        x_withoutSpace += i;
+    }
+    cout << infix_to_postfix(x_withoutSpace);
 }

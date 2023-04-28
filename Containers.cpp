@@ -399,6 +399,7 @@ struct node
     type element;
     node<type> *next;
     node(type element) : element(element) {}
+    node() : next(NULL) , element(0) {}
 };
 // Single Linked List
 
@@ -407,14 +408,14 @@ class SLL
 {
 private:
     int size;
-
-    node<type> *head, *tail;
-
 public:
+    node<type> *head, *tail;
     SLL()
     {
         clear();
     }
+    SLL<type>& operator=(const SLL<type> anotherSLL);
+   // SLL(const SLL<type> anotherSLL);
     void insertAtHead(type ele);
     void insertAtTail(type ele);
     void insertAt(type ele, int index);
@@ -430,6 +431,40 @@ public:
     void clear();
     void print();
 };
+
+template <typename type>
+SLL<type>& SLL<type>::operator=(const SLL<type> anotherSLL)
+{
+    if (this != &anotherSLL)
+    {
+        delete head;
+        delete tail;
+        head = new node<type>;
+        tail = new node<type>;
+        head = tail = nullptr;
+        node<type>* current = anotherSLL.head;
+
+        while (current != NULL)
+        { 
+            this->insertAtTail(current->element);
+            current = current->next;
+        }
+    }
+    return *this;
+}
+
+// template <typename type>
+// SLL<type>::SLL(const SLL<type> anotherSLL)
+// {
+//     node<type>* current = anotherSLL.head;
+//     head = tail = nullptr;
+//     while (current != NULL)
+//     { 
+//         this->insertAtTail(current->element);
+//         current = current->next;
+//     }
+// }
+
 template <typename type>
 int SLL<type>::linkedListSize()
 {
@@ -605,7 +640,7 @@ type SLL<type>::retrieveAt(int index)
     if (size <= index)
     {
         // cout << "\n\t\t\t*** out of bounds ***\n" << endl;
-        return e;
+        return 0;
     }
     node<type> *ptr = head;
     int counter = 0;

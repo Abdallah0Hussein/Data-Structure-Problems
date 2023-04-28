@@ -2,21 +2,21 @@
 #include "Containers.cpp"
 
 using namespace std;
-
-void combineNodes(Node* head, Linked_List& newList);
+template <typename type>
+void combineNodes(node<type>* head, SLL<type>& newList);
 
 int main()
 {
-  Linked_List list;
-  Linked_List newList;
-  list.insert_end(0);
-  list.insert_end(3);
-  list.insert_end(1);
-  list.insert_end(0);
-  list.insert_end(4);
-  list.insert_end(5);
-  list.insert_end(2);
-  list.insert_end(0);
+  SLL<int> list;
+  SLL<int> newList;
+  list.insertAtTail(0);
+  list.insertAtTail(3);
+  list.insertAtTail(1);
+  list.insertAtTail(0);
+  list.insertAtTail(4);
+  list.insertAtTail(5);
+  list.insertAtTail(2);
+  list.insertAtTail(0);
   combineNodes(list.head, newList);
   list.print();
   cout << "\n-------------------------\n";
@@ -24,25 +24,26 @@ int main()
 }
 
 // Take the original linked list head and combine its the nodes between zeros into the newList
-void combineNodes(Node* head, Linked_List& newList)
+template <typename type>
+void combineNodes(node<type>* head, SLL<type>& newList)
 {
-  //Linked_List newList;
+  //SLL<int> newList;
   int element = 0;
 
   // [0, 3, 1, 0, 4, 5, 2, 0]
   while (head->next != NULL)
   {
-    if ((head->next)->value == 0)
+    if ((head->next)->element == 0)
     {
-      // Combine the current node value with the value of the 'element'
-      // Then Insert it into the list then reset the 'element' value
-      element += head->value;
-      newList.insert_end(element);
+      // Combine the current node element with the element of the 'element'
+      // Then Insert it into the list then reset the 'element' element
+      element += head->element;
+      newList.insertAtTail(element);
       element = 0;
       }
       else
       {
-        element += head->value;
+        element += head->element;
       }
     head = head->next;
   }

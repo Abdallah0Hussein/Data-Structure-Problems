@@ -225,20 +225,14 @@ public:
     }
     void enqueue(type ele)
     {
-
         arr[size] = ele;
         size++;
     }
     type first()
     {
-
-        // cout << "first : " << head->element << endl;
-        // cout << "inside : " << endl;
-        // print();
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This queue is empty ***\n"
-                 << endl;
+            throw std::out_of_range("\n\t\t\t*** This queue is empty ***\n");
         }
         return arr[0];
     }
@@ -276,19 +270,20 @@ public:
     {
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This queue is empty ***\n"
-                 << endl;
-            return;
+            throw std::out_of_range("\n\t\t\t*** This queue is empty ***\n");
         }
-        for (int i = 0; i < size; i++)
+        else
         {
-            if (i == size - 1)
+            for (int i = 0; i < size; i++)
             {
-                cout << arr[i] << endl;
-            }
-            else
-            {
-                cout << arr[i] << " <- ";
+                if (i == size - 1)
+                {
+                    cout << arr[i] << endl;
+                }
+                else
+                {
+                    cout << arr[i] << " <- ";
+                }
             }
         }
     }
@@ -300,7 +295,7 @@ struct node
     type element;
     node<type> *next;
     node(type element) : element(element) {}
-    node() : next(NULL) , element(0) {}
+    node() : next(NULL), element(0) {}
 };
 // Single Linked List
 
@@ -309,14 +304,15 @@ class SLL
 {
 private:
     int size;
+
 public:
     node<type> *head, *tail;
     SLL()
     {
         clear();
     }
-    SLL<type>& operator=(const SLL<type> anotherSLL);
-   // SLL(const SLL<type> anotherSLL);
+    SLL<type> &operator=(const SLL<type> anotherSLL);
+    // SLL(const SLL<type> anotherSLL);
     void insertAtHead(type ele);
     void insertAtTail(type ele);
     void insertAt(type ele, int index);
@@ -334,7 +330,7 @@ public:
 };
 
 template <typename type>
-SLL<type>& SLL<type>::operator=(const SLL<type> anotherSLL)
+SLL<type> &SLL<type>::operator=(const SLL<type> anotherSLL)
 {
     if (this != &anotherSLL)
     {
@@ -343,10 +339,10 @@ SLL<type>& SLL<type>::operator=(const SLL<type> anotherSLL)
         head = new node<type>;
         tail = new node<type>;
         head = tail = nullptr;
-        node<type>* current = anotherSLL.head;
+        node<type> *current = anotherSLL.head;
 
         while (current != NULL)
-        { 
+        {
             this->insertAtTail(current->element);
             current = current->next;
         }
@@ -360,7 +356,7 @@ SLL<type>& SLL<type>::operator=(const SLL<type> anotherSLL)
 //     node<type>* current = anotherSLL.head;
 //     head = tail = nullptr;
 //     while (current != NULL)
-//     { 
+//     {
 //         this->insertAtTail(current->element);
 //         current = current->next;
 //     }

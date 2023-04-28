@@ -54,6 +54,4 @@ int main()
     string x;
     cin >> x;
     cout << infix_to_postfix(x);
-
-
 }

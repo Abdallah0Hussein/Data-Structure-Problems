@@ -216,10 +216,9 @@ public:
 class Linked_List
 {
 private:
-    Node *head;
     Node *tail;
-
 public:
+    Node *head;
     void print();
     void insert_end(int value);
     Linked_List() : head(nullptr), tail(nullptr) {}

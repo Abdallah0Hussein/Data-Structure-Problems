@@ -126,97 +126,57 @@ public:
     }
 };
 
-struct Node
-{
-    int value;
-    Node *next;
-    Node(int value) : value(value) {}
-};
-class Stack_Linked_List
-{
-private:
-    Node *head;
-
-public:
-    Stack_Linked_List() : head(nullptr) {}
-    void add(int value) // add front
-    {
-        Node *new_node = new Node(value);
-        new_node->next = head;
-        head = new_node;
-    }
-    int pop() // pop front
-    {
-        if (head == nullptr)
-        {
-            throw runtime_error("List is empty");
-        }
-        Node *new_node = head->next;
-        int removed_value = head->value;
-        delete head;
-        head = new_node;
-        return removed_value;
-    }
-    void print()
-    {
-        Node *tmp = head;
-        while (tmp != nullptr)
-        {
-            cout << tmp->value << " ";
-            tmp = tmp->next;
-        }
-    }
-};
 template <typename type>
 class Stack
 {
 private:
     int size;
     int maxSize = 10;
-    type *arr = new type[size];
+    type *arr;
 
 public:
-    Stack(int n)
+    Stack(int maxSize) : maxSize(maxSize), size(0)
     {
-        maxSize = n;
+        arr = new type[maxSize];
     }
-    Stack()
+    Stack() : size(0)
     {
-        size = 0;
+        arr = new type[maxSize];
     }
     void push(type ele)
     {
         if (size >= maxSize)
         {
             maxSize *= 2;
+            type *new_array = new type[maxSize];
+            for (int i = 0; i < size; i++)
+            {
+                new_array[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_array;
         }
-        arr[size] = ele;
-        size++;
+        arr[size++] = ele;
     }
     type pop()
     {
-        type e = arr[size - 1];
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This stack is empty ***" << endl;
+            throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
         }
-        else
-        {
-            size--;
-        }
-        return e;
+        return arr[--size];
     }
     type top()
     {
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This stack is empty ***" << endl;
+            throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
         }
         return arr[size - 1];
     }
     bool isEmpty()
     {
-        return arr.size() == 0;
+        return size == 0;
     }
     void clear()
     {
@@ -230,8 +190,7 @@ public:
     {
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This stack is empty ***" << endl;
-            return;
+            throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
         }
         for (int i = size - 1; i >= 0; i--)
         {
@@ -245,82 +204,24 @@ public:
     }
 };
 
-// class Stack
-// {
-// private:
-//     int size;
-//     int top;
-//     int *array;
-
-// public:
-//     Stack() : size(0), top(-1), array(nullptr) {}
-//     Stack(int size) : size(size), top(-1)
-//     {
-//         array = new int[size];
-//     }
-//     bool isEmpty()
-//     {
-//         return top == -1;
-//     }
-//     void push(int item)
-//     {
-//         if (top == size - 1)
-//         {
-//             int *new_array = new int[size * 2];
-//             for (int i = 0; i < size; i++)
-//             {
-//                 new_array[i] = array[i];
-//             }
-//             delete[] array;
-//             array = new_array;
-//             size *= 2;
-//         }
-//         array[++top] = item;
-//     }
-//     int pop()
-//     {
-//         if (top == -1)
-//         {
-//             throw runtime_error("Stack is empty");
-//         }
-//         return array[top--];
-//     }
-//     int peek()
-//     {
-//         return array[top];
-//     }
-// };
-
-// int main()
-// {
-//     // Stack stck(3);
-//     // stck.push(2);
-//     // stck.push(4);
-//     // stck.push(3);
-//     // for (int i = 0; i < 3; ++i)
-//     // {
-//     //     cout << stck.peek() << endl;
-//     //     stck.pop();
-//     // }
-//     Stack_Linked_List lst;
-//     lst.add(2);
-//     lst.add(4);
-//     lst.add(4);
-//     lst.pop();
-//     lst.add(3);
-//     lst.print();
-// }
 template <typename type>
 class Queue
 {
 private:
     int size;
-    type *arr = new type[size];
+    type *arr;
 
 public:
     Queue()
     {
         size = 0;
+        arr = new type[10];
+    }
+
+    Queue(int maxSize)
+    {
+        size = 0;
+        arr = new type[maxSize];
     }
     void enqueue(type ele)
     {
@@ -346,7 +247,7 @@ public:
         type e = arr[0];
         if (size == 0)
         {
-            cout << "\n\t\t\t*** This queue is empty ***\n";
+            throw std::out_of_range("\n\t\t\t*** This queue is empty ***\n");
         }
         else
         {
@@ -424,7 +325,7 @@ public:
     void removeAt(int index);
     type retrieveAt(int index);
     void replaceAt(type ele, int index);
-    bool isExit(type ele);
+    bool isExist(type ele);
     bool isItemAtEqual(type ele, int index);
     bool isEmpty();
     int linkedListSize();
@@ -678,7 +579,7 @@ void SLL<type>::replaceAt(type ele, int index)
     }
 }
 template <typename type>
-bool SLL<type>::isExit(type ele)
+bool SLL<type>::isExist(type ele)
 {
     // zero based
     node<type> *ptr = head;
@@ -723,152 +624,6 @@ void SLL<type>::print()
     cout << tail->element << endl;
 }
 
-class Linked_List
-{
-private:
-    Node *tail;
-
-public:
-    Node *head;
-    void print();
-    void insert_end(int value);
-    Linked_List() : head(nullptr), tail(nullptr) {}
-    void search(int value);
-    ~Linked_List();
-    void insert_front(int value);
-    void delete_front();
-    void delete_end();
-    void delete_val(int value);
-    void insertion(int value, int index);
-};
-void Linked_List::delete_val(int value)
-{
-    Node *current = head;
-    Node *previous = nullptr;
-    while (current != nullptr)
-    {
-        if (current->value == value)
-        {
-            previous->next = current->next;
-            delete current;
-            current = previous->next;
-            break;
-        }
-        previous = current;
-        current = current->next;
-    }
-}
-void Linked_List::insertion(int value, int index)
-{
-    Node *new_node = new Node(value);
-    Node *current = head;
-    index--;
-    while (current != nullptr && index != 0)
-    {
-        current = current->next;
-        // cout << head->next << '\n';
-        index--;
-    }
-    new_node->next = current->next;
-    current->next = new_node;
-}
-void Linked_List::delete_end()
-{
-    if (head == nullptr)
-    {
-        // Empty list
-        return;
-    }
-    else if (head == tail)
-    {
-        // Only one node in the list
-        delete head;
-        head = nullptr;
-        tail = nullptr;
-    }
-    else
-    {
-        Node *current = head;
-        while (current->next != tail)
-        {
-            current = current->next;
-        }
-        delete tail;
-        tail = current;
-        current->next = nullptr;
-    }
-}
-
-void Linked_List::delete_front()
-{
-    Node *new_node = head->next;
-    delete head;
-    head = new_node;
-}
-
-void Linked_List::insert_front(int value)
-{
-    Node *new_node = new Node(value);
-    if (head == nullptr)
-    {
-        head = new_node;
-        tail = new_node;
-    }
-    else
-    {
-        new_node->next = head;
-        head = new_node;
-    }
-}
-Linked_List::~Linked_List()
-{
-    while (head != nullptr)
-    {
-        Node *current = head->next;
-        delete head;
-        head = current;
-    }
-    head = tail = nullptr;
-}
-void Linked_List::print()
-{
-    Node *tmp = head;
-    while (tmp != nullptr)
-    {
-        cout << tmp->value << " ";
-        tmp = tmp->next;
-    }
-}
-
-void Linked_List::insert_end(int value)
-{
-    Node *new_node = new Node(value);
-    if (head == nullptr)
-    {
-        head = new_node;
-        tail = new_node;
-        tail->next = nullptr;
-    }
-
-    else
-    {
-        tail->next = new_node;
-        tail = new_node;
-        new_node->next = nullptr;
-    }
-}
-void Linked_List::search(int value)
-{
-    int counter = 0;
-    for (Node *node = head; node != nullptr; node = node->next, ++counter)
-    {
-        if (node->value == value)
-        {
-            cout << counter << " ";
-        }
-    }
-}
-
 template <typename type>
 struct D_node
 {
@@ -894,33 +649,37 @@ public:
     void insertAtHead(type ele);
     void insertAtTail(type ele);
     void insertAt(type ele, int index);
+    void insertAfter(D_node<type> *prev_node, int data);
     int doubleLinkedListSize();
     void removeAtHead();
     void removeAtTail();
     bool isEmpty();
     void clear();
-    void print();
-    // not compelte
     void removeAt(int index);
     type retrieveAt(int index);
     void replaceAt(type ele, int index);
-    bool isExit(type ele);
+    bool isExist(type ele);
     bool isItemAtEqual(type ele, int index);
     void reverse();
     void forwardTraversal();
-    // problem
     void backwardTraversal();
 };
 template <typename type>
-void DLL<type>::print()
+void DLL<type>::insertAfter(D_node<type> *prev_node, int data)
 {
-    D_node<type> *tmp = head;
-    while (tmp != nullptr)
+    if (prev_node == nullptr)
     {
-        cout << tmp->element << " ";
-        tmp = tmp->next;
+        throw std::invalid_argument("Previous node can't be null");
     }
+    D_node<type> *new_node = new D_node<type>(data);
+    new_node->next = prev_node->next;
+    if (prev_node->next != nullptr) // the nullptr doesn't have a previous ptr
+        prev_node->next->prev = new_node;
+    prev_node->next = new_node;
+    new_node->prev = prev_node;
+    size++;
 }
+
 template <typename type>
 int DLL<type>::doubleLinkedListSize()
 {
@@ -979,32 +738,28 @@ void DLL<type>::insertAtTail(type ele)
 template <typename type>
 void DLL<type>::insertAt(type ele, int index)
 {
-    if (index >= size)
+    if (index > size)
     {
-        cout << "\n\t\t\t*** out of bounds ***\n";
-        return;
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
     }
     else if (index == 0)
     {
         insertAtHead(ele);
+        return;
     }
-    else if (index == size - 1)
+    else if (index == size)
     {
         insertAtTail(ele);
+        return;
     }
     else
     {
-        int counter = 0;
         D_node<type> *ptr = head;
-        D_node<type> *newNode = new D_node<type>(ele);
         for (int i = 1; i < index; i++)
         {
             ptr = ptr->next;
         }
-        newNode->next = ptr->next;
-        newNode->prev = ptr;
-        ptr->next->prev = newNode;
-        ptr->next = newNode;
+        insertAfter(ptr, ele);
     }
     size++;
 }
@@ -1013,9 +768,7 @@ void DLL<type>::removeAtHead()
 {
     if (head == NULL)
     {
-        cout << "\n\t\t\t*** This list is empty ***\n"
-             << endl;
-        return;
+        throw std::out_of_range("\n\t\t\t*** This list is empty ***\n");
     }
     else if (size == 0)
     {
@@ -1034,9 +787,7 @@ void DLL<type>::removeAtTail()
 {
     if (head == NULL)
     {
-        cout << "\n\t\t\t*** This list is empty ***\n"
-             << endl;
-        return;
+        throw std::out_of_range("\n\t\t\t*** This list is empty ***\n");
     }
     else if (size == 0)
     {
@@ -1051,13 +802,11 @@ void DLL<type>::removeAtTail()
     size--;
 }
 template <typename type>
-// not compelte
 void DLL<type>::removeAt(int index)
 {
     if (index >= size)
     {
-        cout << "\n\t\t\t*** out of bounds ***\n";
-        return;
+        throw std::out_of_range("\n\t\t\t*** out of bounds ***\n");
     }
     else if (index == 0)
     {
@@ -1069,15 +818,14 @@ void DLL<type>::removeAt(int index)
     }
     else
     {
-        int counter = 0;
-        D_node<type> *ptr = head->next;
-        D_node<type> *ptrN;
-        for (int i = 1; i < index; i++)
+        D_node<type> *ptr = head;
+        for (int i = 0; i < index; i++)
         {
             ptr = ptr->next;
         }
         ptr->prev->next = ptr->next;
         ptr->next->prev = ptr->prev;
+        delete ptr;
     }
     size--;
 }
@@ -1085,35 +833,31 @@ template <typename type>
 type DLL<type>::retrieveAt(int index)
 {
     // zero based
-    type e;
     if (size <= index)
     {
-        // cout << "\n\t\t\t*** out of bounds ***\n" << endl;
-        return e;
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
     }
     D_node<type> *ptr = head;
     int counter = 0;
-    while (ptr->next != NULL)
+    while (ptr->next != nullptr)
     {
         if (counter == index)
         {
-            e = ptr->element;
             break;
         }
         counter++;
         ptr = ptr->next;
     }
-    return e;
+    return ptr->element;
 }
+
 template <typename type>
 void DLL<type>::replaceAt(type ele, int index)
 {
     // zero based
     if (size <= index)
     {
-        cout << "\n\t\t\t*** out of bounds ***\n"
-             << endl;
-        return;
+        throw std::out_of_range("\n\t\t\t*** out of bounds ***\n");
     }
     D_node<type> *ptr = head;
     int counter = 0;
@@ -1121,26 +865,24 @@ void DLL<type>::replaceAt(type ele, int index)
     {
         if (counter == index)
         {
-            ptr->element = ele;
             break;
         }
         counter++;
         ptr = ptr->next;
     }
+    ptr->element = ele;
 }
 template <typename type>
-bool DLL<type>::isExit(type ele)
+bool DLL<type>::isExist(type ele)
 {
     // zero based
     D_node<type> *ptr = head;
-    int counter = 0;
-    while (ptr->next != NULL)
+    while (ptr != nullptr)
     {
         if (ptr->element == ele)
         {
             return true;
         }
-        counter++;
         ptr = ptr->next;
     }
     return false;
@@ -1148,9 +890,15 @@ bool DLL<type>::isExit(type ele)
 template <typename type>
 bool DLL<type>::isItemAtEqual(type ele, int index)
 {
+    // zero based
+    if (size <= index)
+    {
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
+    }
+
     D_node<type> *ptr = head;
     int counter = 0;
-    while (ptr->next != NULL)
+    while (ptr != nullptr)
     {
         if (counter == index)
         {
@@ -1166,17 +914,13 @@ bool DLL<type>::isItemAtEqual(type ele, int index)
 template <typename type>
 void DLL<type>::reverse()
 {
-    D_node<type> *start = head;
-    int count = 0;
-    D_node<type> *end = tail;
-    // cout << "size : " << size << endl;
-    while (count < size)
+    D_node<type> *current = head;
+    while (current != nullptr)
     {
-        swap(start->element, end->element);
-        start = start->next;
-        end = end->prev;
-        count += 2;
+        swap(current->next, current->prev);
+        current = current->prev;
     }
+    swap(head, tail);
 }
 template <typename type>
 void DLL<type>::forwardTraversal()
@@ -1200,156 +944,3 @@ void DLL<type>::backwardTraversal()
     }
     cout << head->element << endl;
 }
-struct D_Node
-{
-    int value;
-    D_Node *next;
-    D_Node *prev;
-    D_Node(int value) : value(value) {}
-};
-class D_Linked_List
-{
-private:
-    D_Node *head;
-    D_Node *tail;
-
-public:
-    D_Linked_List() : head(nullptr), tail(nullptr) {}
-    ~D_Linked_List();
-    void print();
-    void insert_end(int value);
-    void insert_front(int value);
-    void insertion(int value, int index);
-    void delete_end();
-    void delete_front();
-    void delete_val(int value);
-    void reverse();
-};
-void D_Linked_List::reverse()
-{
-    D_Node *current = head;
-    while (current != nullptr)
-    {
-        swap(current->next, current->prev);
-        current = current->prev;
-    }
-    swap(head, tail);
-}
-
-void D_Linked_List::delete_val(int value)
-{
-    D_Node *current = head;
-    while (current != nullptr)
-    {
-        if (current->value == value)
-        {
-            D_Node *tmp = current;
-            current->prev->next = current->next;
-            current->next->prev = current->prev;
-            current = current->next;
-            delete tmp;
-        }
-        current = current->next;
-    }
-}
-void D_Linked_List::delete_front()
-{
-    D_Node *current = head->next;
-    delete head;
-    head = current;
-    head->prev = nullptr;
-}
-void D_Linked_List::delete_end()
-{
-    D_Node *current = tail->prev;
-    delete tail;
-    current->next = nullptr;
-    tail = current;
-}
-void D_Linked_List::insertion(int value, int index)
-{
-    D_Node *current = head;
-    while (current != nullptr && index > 0)
-    {
-        index--;
-        current = current->next;
-    }
-    D_Node *new_node = new D_Node(value);
-    new_node->prev = current->prev;
-    new_node->next = current;
-    current->prev->next = new_node;
-    current->prev = new_node;
-}
-
-void D_Linked_List::insert_front(int value)
-{
-    D_Node *new_node = new D_Node(value);
-    if (head == nullptr)
-    {
-        head = tail = new_node;
-        tail->next = nullptr;
-        head->prev = nullptr;
-    }
-    else
-    {
-        new_node->next = head;
-        new_node->prev = nullptr;
-        head->prev = new_node;
-        head = new_node;
-    }
-}
-D_Linked_List::~D_Linked_List()
-{
-    while (head != nullptr)
-    {
-        D_Node *tmp = head->next;
-        delete head;
-        head = tmp;
-    }
-    head = tail = nullptr;
-}
-void D_Linked_List::insert_end(int value)
-{
-    D_Node *new_node = new D_Node(value);
-    if (head == nullptr)
-    {
-        head = new_node;
-        tail = new_node;
-        tail->next = nullptr;
-        head->prev = nullptr;
-    }
-    else
-    {
-        new_node->prev = tail;
-        new_node->next = nullptr;
-        tail->next = new_node;
-        tail = new_node;
-    }
-}
-void D_Linked_List::print()
-{
-    D_Node *tmp = head;
-    while (tmp != nullptr)
-    {
-        cout << tmp->value << " ";
-        tmp = tmp->next;
-    }
-}
-
-// int main()
-// {
-//     D_Linked_List list;
-//     // list.insert_end(5);
-//     // list.insert_end(4);
-//     // list.insert_end(3);
-//     list.insert_front(4);
-//     list.insert_front(3);
-//     list.insert_front(2);
-//     // list.insertion(1, 1);
-//     // list.insertion(3, 2);
-//     // list.delete_end();
-//     // list.delete_front();
-//     // list.delete_val(3);
-//     // list.reverse();
-//     list.print();
-// }

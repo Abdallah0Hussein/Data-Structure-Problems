@@ -1,13 +1,11 @@
 #include <bits/stdc++.h>
 #include "Containers.cpp"
 using namespace std;
-int main()
+int longestValidParentheses(string str)
 {
     Stack<char> s;
-    string str;
-    cin >> str;
-
     int count = 0;
+
     for (int i = 0; i < str.size(); i++)
     {
         if (str[i] == '(')
@@ -21,5 +19,13 @@ int main()
             }
         }
     }
-    cout << count << endl;
+    return count;
+}
+int main()
+{
+    Stack<char> s;
+    string str;
+    cin >> str;
+
+    cout << longestValidParentheses(str);
 }

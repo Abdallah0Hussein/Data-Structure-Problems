@@ -131,7 +131,7 @@ class Stack
 {
 private:
     int size;
-    int maxSize = 10;
+    int maxSize;
     type *arr;
 
 public:
@@ -139,13 +139,13 @@ public:
     {
         arr = new type[maxSize];
     }
-    Stack() : size(0)
+    Stack() : size(0), maxSize(10)
     {
         arr = new type[maxSize];
     }
     void push(type ele)
     {
-        if (size >= maxSize)
+        if (size == maxSize)
         {
             maxSize *= 2;
             type *new_array = new type[maxSize];
@@ -163,6 +163,17 @@ public:
         if (size == 0)
         {
             throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
+        }
+        if (size < (maxSize / 4)) // Shrink the array when it's only 25% full
+        {
+            maxSize /= 2;
+            type *new_arr = new type[maxSize];
+            for (int i = 0; i < size; i++)
+            {
+                new_arr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_arr;
         }
         return arr[--size];
     }
@@ -190,7 +201,7 @@ public:
     {
         if (size == 0)
         {
-            throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
+            cout << "\n\t\t\t*** This stack is empty ***";
         }
         for (int i = size - 1; i >= 0; i--)
         {
@@ -209,40 +220,32 @@ class Queue
 {
 private:
     int size;
+    int maxSize;
     type *arr;
 
 public:
-    Queue()
+    Queue() : size(0), maxSize(10)
     {
-        size = 0;
-        arr = new type[10];
-    }
-
-    Queue(int maxSize)
-    {
-        size = 0;
         arr = new type[maxSize];
     }
 
-    // Queue<type>& operator=(Queue<type>& other)
-    // {
-    //     cout << "Queue:";
-    //     if (this != &other)
-    //     {
-    //         delete[] arr;
-    //         arr = new type[other.queueSize()];
-    //         size = other.queueSize();
-    //         for (int i = 0; i < size; i++)
-    //         {
-    //             this->enqueue(other.dequeue());
-    //             other.enqueue();
-    //         }
-    //     }
-    //     return *this;
-    // }
-
+    Queue(int maxSize) : maxSize(maxSize), size(0)
+    {
+        arr = new type[maxSize];
+    }
     void enqueue(type ele)
     {
+        if (size == maxSize)
+        {
+            maxSize *= 2;
+            type *new_arr = new type[maxSize];
+            for (int i = 0; i < size; i++)
+            {
+                new_arr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_arr;
+        }
         arr[size] = ele;
         size++;
     }
@@ -263,12 +266,22 @@ public:
         }
         else
         {
-            // cout << "done" << endl;
             for (size_t i = 0; i < size - 1; i++)
             {
                 arr[i] = arr[i + 1];
             }
             size--;
+            if (size < (maxSize / 4)) // Shrink the array when it's only 25% full
+            {
+                maxSize /= 2;
+                type *new_arr = new type[maxSize];
+                for (int i = 0; i < size; i++)
+                {
+                    new_arr[i] = arr[i];
+                }
+                delete[] arr;
+                arr = new_arr;
+            }
         }
         return e;
     }
@@ -288,7 +301,7 @@ public:
     {
         if (size == 0)
         {
-            throw std::out_of_range("\n\t\t\t*** This queue is empty ***\n");
+            cout << "\n\t\t\t*** This queue is empty ***\n";
         }
         else
         {
@@ -526,7 +539,7 @@ void SLL<type>::removeAt(int index)
         removeAtHead();
         return;
     }
-    if (index == size - 1)
+    if (index == (size - 1))
     {
         removeAtTail();
         return;

@@ -28,27 +28,33 @@ public:
 
   type pop()
   {
+    // Exception for poping an empty stack
     if (size == 0)
     {
       throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
     }
 
     Queue<type> Q(size - 1);
+    // Intialize "element"
     type element = queue.first();
     for (int i = 0; i < size; i++)
     {
+      // Dequeue the last element form this->queue and storing it at "element"
       if (i == (size - 1))
       {  
         element = queue.dequeue();
       }
       else
       {
+        // Copying all elements of the "queue" except the last element into "Q" 
+        // By dequeuing elements of the "queue" and enqueuing them into "Q"
         Q.enqueue(queue.dequeue());      
       }
     }
 
     for (int i = 0; i < size - 1; i++)
     {
+      // Restore all elements of the "queue" except the last element FROM "Q"
       queue.enqueue(Q.dequeue());      
     }
     --size;

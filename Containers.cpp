@@ -223,6 +223,24 @@ public:
         size = 0;
         arr = new type[maxSize];
     }
+
+    // Queue<type>& operator=(Queue<type>& other)
+    // {
+    //     cout << "Queue:";
+    //     if (this != &other)
+    //     {
+    //         delete[] arr;
+    //         arr = new type[other.queueSize()];
+    //         size = other.queueSize();
+    //         for (int i = 0; i < size; i++)
+    //         {
+    //             this->enqueue(other.dequeue());
+    //             other.enqueue();
+    //         }
+    //     }
+    //     return *this;
+    // }
+
     void enqueue(type ele)
     {
         arr[size] = ele;

@@ -322,7 +322,10 @@ class SLL
 {
 private:
     int size;
+    // Swap first node with Idx's node
+    void swap (int Idx);
 
+    void adjacentSwap(int firstIdx, int secondIdx);
 public:
     node<type> *head, *tail;
     SLL()
@@ -345,7 +348,138 @@ public:
     int linkedListSize();
     void clear();
     void print();
+    void swap (int firstIdx, int secondIdx);
+    
 };
+
+template <typename type>
+void SLL<type>::swap (int firstIdx, int secondIdx)
+{
+    if (firstIdx >= size || secondIdx >= size || firstIdx == secondIdx)
+    {
+        cout << "Cannot be swapped!" << endl;
+        return;
+    }
+
+    if (abs(firstIdx - secondIdx) == 1)
+    {
+        adjacentSwap(firstIdx, secondIdx);
+        return;
+    }
+
+    if (firstIdx == 0)
+    {
+        swap(secondIdx);
+        return;
+    }
+    else if (secondIdx == 0)
+    {
+        swap(secondIdx);
+        return;
+    }
+    
+
+    node<type>* cursorB1 = this->head;
+    node<type>* cursorB2 = this->head;
+    node<type>* cursor1 = nullptr;
+    node<type>* cursorAf1 = nullptr;
+    node<type>* cursorAf2 = nullptr;
+    node<type>* cursor2 = nullptr;
+
+    // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
+    for (int i = 0; i < firstIdx - 1; i++) 
+    {
+        cursorB1 = cursorB1->next;
+    }
+    cursor1 = cursorB1->next;
+    cursorAf1 = cursor1->next; 
+
+    for (int i = 0; i < secondIdx - 1; i++) 
+    {
+        cursorB2 = cursorB2->next;
+    }
+    cursor2 = cursorB2->next;
+    cursorAf2 = cursor2->next;
+
+    cursorB1->next = cursor2;
+
+    cursor2->next = cursorAf1;
+
+    cursorB2->next = cursor1;
+
+    cursor1->next = cursorAf2;
+}
+
+
+template <typename type>
+void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
+{
+    if (firstIdx > secondIdx)
+    {
+        swap(firstIdx, secondIdx);
+    }
+    node<type>* cursorB1 = this->head;
+    node<type>* cursor1 = nullptr;
+    
+    node<type>* cursor2 = this->head;
+    node<type>* cursorAf2 = nullptr;
+
+    for (int i = 0; i < secondIdx; i++) 
+    {
+        cursor2 = cursor2->next;
+    }
+    cursorAf2 = cursor2->next;
+
+    if (firstIdx == 0)
+    {
+        cursor1 = this->head;
+        this->head = cursor2;  
+        cursor2->next = cursor1;
+        cursor1->next = cursorAf2;
+        return; 
+    }
+
+    // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
+    for (int i = 0; i < firstIdx - 1; i++) 
+    {
+        cursorB1 = cursorB1->next;
+    }
+    cursor1= cursorB1->next;
+
+    cout << cursorB1->next->next->element << endl;
+    cursorB1->next = cursor2;
+    //cout << cursorB1->next->next->element << endl;
+    cursor2->next = cursor1;
+    cout << cursor2->next->element << endl;
+    cursor1->next = cursorAf2;
+ //   cout << cursorB1->next->next->element<< endl;
+}
+
+template <typename type>
+void SLL<type>::swap (int Idx)
+{
+    node<type>* cursor1 = this->head;
+    node<type>* cursorAf1 = cursor1->next;
+
+    node<type>* cursorB2 = this->head;
+    node<type>* cursor2 = nullptr;
+    node<type>* cursorAf2 = nullptr;
+    
+    for (int i = 0; i < Idx - 1; i++) 
+    {
+        cursorB2 = cursorB2->next;
+    }
+    cursor2 = cursorB2->next;
+    cursorAf2 = cursor2->next; 
+    
+    this->head = cursor2;
+
+    cursor2->next = cursorAf1;
+
+    cursorB2->next = cursor1;
+
+    cursor1->next = cursorAf2;
+}
 
 template <typename type>
 SLL<type> &SLL<type>::operator=(const SLL<type> anotherSLL)
@@ -425,7 +559,7 @@ void SLL<type>::insertAtTail(type ele)
     else
     {
         tail->next = newNode;
-        newNode->next = NULL;
+        newNode->next = nullptr;
         tail = newNode;
     }
     size++;

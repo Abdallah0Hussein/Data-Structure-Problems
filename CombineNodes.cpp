@@ -17,10 +17,21 @@ int main()
   list.insertAtTail(5);
   list.insertAtTail(2);
   list.insertAtTail(0);
+
   combineNodes(list.head, newList);
   list.print();
   cout << "\n-------------------------\n";
   newList.print();
+  
+  SLL<int> list2;
+  list2.insertAtTail(0);
+  list2.insertAtTail(1);
+  list2.insertAtTail(2);
+  list2.insertAtTail(3);
+  list2.insertAtTail(4);
+
+  list2.swap(3, 4);
+  list2.print();
 }
 
 // Take the original linked list head and combine its the nodes between zeros into the newList

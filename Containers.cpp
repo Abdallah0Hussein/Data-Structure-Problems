@@ -131,7 +131,7 @@ class Stack
 {
 private:
     int size;
-    int maxSize = 10;
+    int maxSize;
     type *arr;
 
 public:
@@ -139,13 +139,13 @@ public:
     {
         arr = new type[maxSize];
     }
-    Stack() : size(0)
+    Stack() : size(0), maxSize(10)
     {
         arr = new type[maxSize];
     }
     void push(type ele)
     {
-        if (size >= maxSize)
+        if (size == maxSize)
         {
             maxSize *= 2;
             type *new_array = new type[maxSize];
@@ -163,6 +163,17 @@ public:
         if (size == 0)
         {
             throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
+        }
+        if (size < (maxSize / 4)) // Shrink the array when it's only 25% full
+        {
+            maxSize /= 2;
+            type *new_arr = new type[maxSize];
+            for (int i = 0; i < size; i++)
+            {
+                new_arr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_arr;
         }
         return arr[--size];
     }
@@ -190,7 +201,7 @@ public:
     {
         if (size == 0)
         {
-            throw std::out_of_range("\n\t\t\t*** This stack is empty ***");
+            cout << "\n\t\t\t*** This stack is empty ***";
         }
         for (int i = size - 1; i >= 0; i--)
         {
@@ -209,40 +220,32 @@ class Queue
 {
 private:
     int size;
+    int maxSize;
     type *arr;
 
 public:
-    Queue()
+    Queue() : size(0), maxSize(10)
     {
-        size = 0;
-        arr = new type[10];
-    }
-
-    Queue(int maxSize)
-    {
-        size = 0;
         arr = new type[maxSize];
     }
 
-    // Queue<type>& operator=(Queue<type>& other)
-    // {
-    //     cout << "Queue:";
-    //     if (this != &other)
-    //     {
-    //         delete[] arr;
-    //         arr = new type[other.queueSize()];
-    //         size = other.queueSize();
-    //         for (int i = 0; i < size; i++)
-    //         {
-    //             this->enqueue(other.dequeue());
-    //             other.enqueue();
-    //         }
-    //     }
-    //     return *this;
-    // }
-
+    Queue(int maxSize) : maxSize(maxSize), size(0)
+    {
+        arr = new type[maxSize];
+    }
     void enqueue(type ele)
     {
+        if (size == maxSize)
+        {
+            maxSize *= 2;
+            type *new_arr = new type[maxSize];
+            for (int i = 0; i < size; i++)
+            {
+                new_arr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_arr;
+        }
         arr[size] = ele;
         size++;
     }
@@ -263,12 +266,22 @@ public:
         }
         else
         {
-            // cout << "done" << endl;
             for (size_t i = 0; i < size - 1; i++)
             {
                 arr[i] = arr[i + 1];
             }
             size--;
+            if (size < (maxSize / 4)) // Shrink the array when it's only 25% full
+            {
+                maxSize /= 2;
+                type *new_arr = new type[maxSize];
+                for (int i = 0; i < size; i++)
+                {
+                    new_arr[i] = arr[i];
+                }
+                delete[] arr;
+                arr = new_arr;
+            }
         }
         return e;
     }
@@ -288,7 +301,7 @@ public:
     {
         if (size == 0)
         {
-            throw std::out_of_range("\n\t\t\t*** This queue is empty ***\n");
+            cout << "\n\t\t\t*** This queue is empty ***\n";
         }
         else
         {
@@ -315,7 +328,7 @@ struct node
     node(type element) : element(element) {}
     node() : next(NULL), element(0) {}
 };
-// Single Linked List
+// **Single Linked List
 
 template <typename type>
 class SLL
@@ -651,7 +664,7 @@ void SLL<type>::removeAt(int index)
     {
         throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
     }
-    else if (index >= size)
+    if (index >= size)
     {
         throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
     }
@@ -660,7 +673,7 @@ void SLL<type>::removeAt(int index)
         removeAtHead();
         return;
     }
-    if (index == size - 1)
+    if (index == (size - 1))
     {
         removeAtTail();
         return;
@@ -688,8 +701,8 @@ type SLL<type>::retrieveAt(int index)
     type e;
     if (size <= index)
     {
-        // cout << "\n\t\t\t*** out of bounds ***\n" << endl;
-        return 0;
+        throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
+
     }
     node<type> *ptr = head;
     int counter = 0;
@@ -781,7 +794,7 @@ struct D_node
     D_node(type element) : element(element) {}
 };
 
-// Doubly Linked List
+// **Doubly Linked List
 template <typename type>
 class DLL
 {
@@ -1091,4 +1104,253 @@ void DLL<type>::backwardTraversal()
         ptr = ptr->prev;
     }
     cout << head->element << endl;
+}
+
+
+// **circular linked list
+template<typename type>
+class circularSLL{
+    private:
+    int length;
+    node<type> *head, *tail;
+    public:
+    circularSLL(){
+        clear();
+    }
+    int linkedListSize();
+    bool isEmpty();
+    void clear();
+    void insertAtHead(type ele);
+    void insertAtTail(type ele);
+    void insertInMiddle(type ele,int index);
+    void removeHead();
+    void removeTail();
+    void removeAt(int index);
+    type retrieveAt(int index);
+    void replaceAt(type ele, int index);
+    bool isExit(type ele);
+    bool isItemAtEqual(type ele, int index);
+    void print();
+};
+template<typename type>
+int circularSLL<type>::linkedListSize(){
+    return length;
+}
+template<typename type>
+bool circularSLL<type>::isEmpty(){
+    return (length == 0);
+}
+template<typename type>
+void circularSLL<type>::clear(){
+    tail = head = nullptr;
+    length  = 0;
+}
+template<typename type>
+void circularSLL<type>::insertAtHead(type ele){
+    node<type> *newNode = new node<type>(ele);
+    if(head == nullptr){
+        head = tail =  newNode;
+        // tail = newNode;
+        newNode->next = head;
+    }
+    else{
+        newNode->next = head;
+        head = newNode;
+        tail->next = head;
+    }
+    length++;
+}
+template<typename type>
+void circularSLL<type>::insertAtTail(type ele){
+    node<type> *newNode = new node<type>(ele);
+    if(head == nullptr){
+        head = newNode;
+        tail = newNode;
+    }else{
+        tail->next = newNode;
+        newNode->next = head;
+        tail = newNode;
+    }
+    length++;
+}
+template<typename type>
+void circularSLL<type>::insertInMiddle(type ele,int index){
+    if(index > length || index < 0){
+        throw std::out_of_range("\n\t\t\tOut of bounds\n");
+    }
+    else{
+        node<type> *newNode = new node<type>(ele);
+        if(index == 0){
+            insertAtHead(ele);
+        }
+        else if(index == length) {
+            insertAtTail(ele);
+        }
+        else{
+            node<type> *ptr = head;
+            for(int i = 1; i < index; i++){
+                ptr = ptr->next;
+            }
+            newNode->next = ptr->next;
+            ptr->next = newNode;
+            length++;
+        }
+    }
+}
+template<typename type>
+void circularSLL<type>::removeHead(){
+    if(length == 0){
+        throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
+    }else if(length == 1){
+        delete head;
+        head = tail = NULL;
+    }
+    else{
+        node<type> *ptr = head;
+        head = ptr->next;
+        tail->next = head;
+        delete ptr;
+    }
+    length--;
+}
+template<typename type>
+void circularSLL<type>::removeTail(){
+    if(length == 0){
+        throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
+    }else if(length == 1){
+        delete head;
+        head = tail = NULL;
+    }
+    else{
+        node<type> *cur = head->next;
+        node<type> *pre = head;
+        int counter = length;
+        while(counter > 1){
+            pre = cur;
+            cur = cur->next;
+            counter--;
+        }
+        delete cur;
+        pre->next = head;
+        tail = pre;
+        delete pre;
+    }
+    length--;
+}
+template<typename type>
+void circularSLL<type>::removeAt(int index){
+    if(length == 0){
+        throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
+    }
+    if (index >= length)
+    {
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
+    }
+    if(index == 0){
+        removeHead();
+        return;
+    }else if(index == length-1){
+        removeTail();
+        return;
+    }
+    else{
+        node<type>*cur = head->next;
+        node<type>* pre = head;
+        for(int i = 1;i < index;i++){
+            pre = cur;
+            cur = cur->next;
+        }
+        if(cur == tail){
+            tail = cur;
+            tail->next = head;
+        }
+        else pre->next = cur->next;
+            // cout << tail->next->element << " " << head->element << endl;
+    }
+    length--;
+}
+template<typename type>
+type circularSLL<type>::retrieveAt(int index){
+    // zero based
+    type e;
+    if(length <= index){
+        throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
+    }
+    node<type>* ptr = head;
+    int counter = 0;
+    int count = length;
+    while(count){
+        if(counter == index){
+            e = ptr->element;
+            break;
+        }
+        counter++;
+        count--;
+        ptr = ptr->next;
+    }
+    return e;
+}
+template<typename type>
+void circularSLL<type>::replaceAt(type ele, int index){
+    // zero based
+    if(length <= index){
+       throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
+    }
+    node<type>* ptr = head;
+    int counter = 0;
+    int count = length;
+    while(count){
+        if(counter == index){
+            ptr->element = ele;
+            break;
+        }
+        counter++;
+        count--;
+        ptr = ptr->next;
+    }
+}
+template<typename type>
+bool circularSLL<type>::isExit(type ele){
+    // zero based
+    node<type>* ptr = head;
+    int counter = length;
+    while(counter){
+        if(ptr->element == ele){
+            return true;
+        }
+        counter--;
+        ptr = ptr->next;
+    }
+    return false;
+}
+template<typename type>
+bool circularSLL<type>::isItemAtEqual(type ele, int index){
+    if(index >= length){
+        throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
+    }
+    node<type>* ptr = head;
+    int counter = 0, size = length;
+    while(size){
+        if(counter == index){
+            if(ptr->element == ele)return true;
+        }
+        counter++;
+        size--;
+        ptr = ptr->next;
+    }
+    return false;
+}
+template<typename type>
+void circularSLL<type>::print(){
+    node<type>* ptr = head;
+    int counter = length;
+    while(counter){
+        if(counter == 1){
+            cout << ptr->element << endl;;
+            break;
+        }
+        cout << ptr->element <<  "->";
+        ptr = ptr->next;
+        counter--;
+    }
 }

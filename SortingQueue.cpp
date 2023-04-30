@@ -14,7 +14,7 @@ void sortQueue(Queue<T> &q)
     }
     sort(vec.begin(),vec.end());
     // copying elements back from queue to the vector but sorted
-    for(T i: vec){
+    for(const T &i: vec){ // & to avoid creating the copying of the character for each iteration
         q.enqueue(i);
     }
 }

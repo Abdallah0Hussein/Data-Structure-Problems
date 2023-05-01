@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 // Array List
@@ -366,9 +367,14 @@ public:
 template <typename type>
 void SLL<type>::swap(int firstIdx, int secondIdx)
 {
-    if (firstIdx >= size || secondIdx >= size || firstIdx == secondIdx)
+    if (firstIdx < 0 || secondIdx < 0 || firstIdx >= size || secondIdx >= size)
     {
-        cout << "Cannot be swapped!" << endl;
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
+        return;
+    }
+    if (firstIdx == secondIdx)
+    {
+        throw std::invalid_argument("Can't swap the same node with itself");
         return;
     }
 
@@ -1176,8 +1182,8 @@ void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
         secondNode = secondNode->next;
     }
     // Swap previous and next pointers
-    std::swap(firstNode->prev, secondNode->prev);
     std::swap(firstNode->next, secondNode->next);
+    std::swap(firstNode->prev, secondNode->prev);
 
     // Update prev pointers of adjacent nodes
     if (firstNode->prev != nullptr)
@@ -1210,25 +1216,25 @@ void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
         tail = firstNode;
 }
 
-// int main()
-// {
-//     DLL<int> list;
-//     list.insertAtHead(10); // 0
-//     list.insertAtTail(20); // 1
-//     list.insertAtTail(30); // 2
-//     list.insertAtTail(40); // 3
-//     list.insertAtTail(50); // 4
+int main()
+{
+    DLL<int> list;
+    list.insertAtTail(10); // 0
+    list.insertAtTail(20); // 1
+    list.insertAtTail(30); // 2
+    list.insertAtTail(40); // 3
+    list.insertAtTail(50); // 4
 
-//     std::cout << "Before swapping: ";
-//     list.forwardTraversal();
+    std::cout << "Before swapping: ";
+    list.forwardTraversal();
 
-//     list.swap(0, 2);
+    list.swap(2, 4);
 
-//     std::cout << "After swapping: ";
-//     list.forwardTraversal();
+    std::cout << "After swapping: ";
+    list.backwardTraversal();
 
-//     return 0;
-// }
+    return 0;
+}
 
 // Circular Linked List
 template <typename type>

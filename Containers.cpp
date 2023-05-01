@@ -337,9 +337,7 @@ private:
     int size;
     // Swap first node with Idx's node
     void swap(int Idx);
-
     void adjacentSwap(int firstIdx, int secondIdx);
-
 public:
     node<type> *head, *tail;
     SLL()
@@ -374,38 +372,53 @@ void SLL<type>::swap(int firstIdx, int secondIdx)
         return;
     }
 
+    // If the two nodes are adjacent
     if (abs(firstIdx - secondIdx) == 1)
     {
         adjacentSwap(firstIdx, secondIdx);
         return;
     }
-
+    // Swapping secondIdx node with the head node (first node)
     if (firstIdx == 0)
     {
         swap(secondIdx);
         return;
     }
+    // Swapping firstIdx node with the head node (first node)
     else if (secondIdx == 0)
     {
-        swap(secondIdx);
+        swap(firstIdx);
         return;
     }
 
+    // Pointer to the Back node of firstIdx node
     node<type> *cursorB1 = this->head;
-    node<type> *cursorB2 = this->head;
+    // Pointer to the firstIdx node
     node<type> *cursor1 = nullptr;
+    // Pointer to the next(After) node of firstIdx node
     node<type> *cursorAf1 = nullptr;
-    node<type> *cursorAf2 = nullptr;
-    node<type> *cursor2 = nullptr;
 
-    // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
+    // Pointer to the Back node of secondIdx node
+    node<type> *cursorB2 = this->head;
+    // Pointer to the secondIdx node
+    node<type> *cursor2 = nullptr;
+    // Pointer to the next(After) node of secondIdx node
+    node<type> *cursorAf2 = nullptr;
+
+
+    /*
+        Making cursorB1 pointing at "firstIdx - 1" node by incrementing it by (firstIdx - 1),
+        'cause the cursorB1 poiting at the head in the intial state
+    */ 
     for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
     }
+    // Inialize the cursors
     cursor1 = cursorB1->next;
     cursorAf1 = cursor1->next;
 
+    // Same as above
     for (int i = 0; i < secondIdx - 1; i++)
     {
         cursorB2 = cursorB2->next;
@@ -413,23 +426,42 @@ void SLL<type>::swap(int firstIdx, int secondIdx)
     cursor2 = cursorB2->next;
     cursorAf2 = cursor2->next;
 
+    /*
+    Swapping nodes by change the Back(previous) and After(next) nodes
+    of the firstIdx node with the Back(previous) and After(next) nodes of secondIdx node
+    */  
     cursorB1->next = cursor2;
-
     cursor2->next = cursorAf1;
-
     cursorB2->next = cursor1;
-
     cursor1->next = cursorAf2;
+
+    // If the cursor1 or cursor2 was the last node then make the tail pointing at it
+    if (cursor1->next == NULL)
+    {
+        tail = cursor1;
+    }
+    else if(cursor2->next == NULL)
+    {
+        tail = cursor2;
+    } 
 }
 
 template <typename type>
 void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
 {
+    /*
+        If the first Index was higher than the second Index 
+        Then swapping the values to make it easy to swap nodes
+    */ 
     if (firstIdx > secondIdx)
     {
         swap(firstIdx, secondIdx);
     }
 
+/* 
+--  Here we need only cursor to the previous node of the firstIdx node 
+--  And a cursor to the next node of secondIdx node, 'cause the two nodes are adjacent
+*/
     node<type>* cursorB1 = this->head;
     node<type>* cursor1 = nullptr;
     
@@ -442,36 +474,44 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     }
     cursorAf2 = cursor2->next;
 
+    // Checking if the firstIdx node (remember: firstIdxit is the lower index now) is first (head) node or not
     if (firstIdx == 0)
     {
+    /*
+    -- Swapping the head node with secondIdx node by making the head pointer points at the second node and first node poiting at the third node
+    -- and the second node poiting at first node 
+    */ 
         cursor1 = this->head;
         this->head = cursor2;
         cursor2->next = cursor1;
         cursor1->next = cursorAf2;
         return;
     }
-
-    // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
+    //Else Intialize the previous node of secondIdx node
     for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
     }
     cursor1 = cursorB1->next;
-    cursor1 = cursorB1->next;
 
-    this->print();
+    /*
+    -- Swapping the two adjacent nodes
+    -- By Making the previous of firstIdx node pointing at the secondIdx node
+    -- and the secondIdx node points at the firstIdx node and the firstIdx node points at the nextnode of the secondIdx node
+    */
     cursorB1->next = cursor2;
-    this->print();
-    cout << cursor1->element << endl;
     cursor2->next = cursor1;
-    cout << cursor1->element << endl;
     cursor1->next = cursorAf2;
-    this->print();
-    cout << cursor1->element << endl;
 
+    // Checking if the cursor1 was the last node to make the tail points at it
+    if (cursor1->next == NULL)
+    {
+        tail = cursor1;
+    } 
 }
 
 template <typename type>
+// Swapping the head node with Idx node
 void SLL<type>::swap(int Idx)
 {
     node<type> *cursor1 = this->head;
@@ -488,13 +528,20 @@ void SLL<type>::swap(int Idx)
     cursor2 = cursorB2->next;
     cursorAf2 = cursor2->next;
 
+    /*
+    -- Swapping the head node with secondIdx node by making the head pointer points at the second node and first node poiting at the next node of the Idx node
+    -- and the Idx node poiting at first node 
+    */ 
     this->head = cursor2;
-
     cursor2->next = cursorAf1;
-
     cursorB2->next = cursor1;
-
     cursor1->next = cursorAf2;
+
+    // Checking if the cursor1 was the last node to make the tail points at it
+    if (cursor1->next == NULL)
+    {
+        tail = cursor1;
+    }
 }
 
 template <typename type>
@@ -778,7 +825,7 @@ bool SLL<type>::isItemAtEqual(type ele, int index)
 template <typename type>
 void SLL<type>::print()
 {
-    node<type> *ptr = head;
+    node<type> *ptr = this->head;
     while (ptr->next != nullptr)
     {
         cout << ptr->element << "->";
@@ -1163,25 +1210,25 @@ void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
         tail = firstNode;
 }
 
-int main()
-{
-    DLL<int> list;
-    list.insertAtHead(10); // 0
-    list.insertAtTail(20); // 1
-    list.insertAtTail(30); // 2
-    list.insertAtTail(40); // 3
-    list.insertAtTail(50); // 4
+// int main()
+// {
+//     DLL<int> list;
+//     list.insertAtHead(10); // 0
+//     list.insertAtTail(20); // 1
+//     list.insertAtTail(30); // 2
+//     list.insertAtTail(40); // 3
+//     list.insertAtTail(50); // 4
 
-    std::cout << "Before swapping: ";
-    list.forwardTraversal();
+//     std::cout << "Before swapping: ";
+//     list.forwardTraversal();
 
-    list.swap(0, 2);
+//     list.swap(0, 2);
 
-    std::cout << "After swapping: ";
-    list.forwardTraversal();
+//     std::cout << "After swapping: ";
+//     list.forwardTraversal();
 
-    return 0;
-}
+//     return 0;
+// }
 
 // Circular Linked List
 template <typename type>

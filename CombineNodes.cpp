@@ -2,6 +2,7 @@
 #include "Containers.cpp"
 
 using namespace std;
+
 template <typename type>
 void combineNodes(node<type>* head, SLL<type>& newList);
 
@@ -30,8 +31,8 @@ int main()
   list2.insertAtTail(3);
   list2.insertAtTail(4);
 
-  list2.swap(3, 4);
-  //list2.print();
+  list2.swap(0, 4);
+  list2.print();
 }
 
 // Take the original linked list head and combine its the nodes between zeros into the newList

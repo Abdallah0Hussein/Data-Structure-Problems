@@ -336,9 +336,10 @@ class SLL
 private:
     int size;
     // Swap first node with Idx's node
-    void swap (int Idx);
+    void swap(int Idx);
 
     void adjacentSwap(int firstIdx, int secondIdx);
+
 public:
     node<type> *head, *tail;
     SLL()
@@ -361,12 +362,11 @@ public:
     int linkedListSize();
     void clear();
     void print();
-    void swap (int firstIdx, int secondIdx);
-    
+    void swap(int firstIdx, int secondIdx);
 };
 
 template <typename type>
-void SLL<type>::swap (int firstIdx, int secondIdx)
+void SLL<type>::swap(int firstIdx, int secondIdx)
 {
     if (firstIdx >= size || secondIdx >= size || firstIdx == secondIdx)
     {
@@ -390,24 +390,23 @@ void SLL<type>::swap (int firstIdx, int secondIdx)
         swap(secondIdx);
         return;
     }
-    
 
-    node<type>* cursorB1 = this->head;
-    node<type>* cursorB2 = this->head;
-    node<type>* cursor1 = nullptr;
-    node<type>* cursorAf1 = nullptr;
-    node<type>* cursorAf2 = nullptr;
-    node<type>* cursor2 = nullptr;
+    node<type> *cursorB1 = this->head;
+    node<type> *cursorB2 = this->head;
+    node<type> *cursor1 = nullptr;
+    node<type> *cursorAf1 = nullptr;
+    node<type> *cursorAf2 = nullptr;
+    node<type> *cursor2 = nullptr;
 
     // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
-    for (int i = 0; i < firstIdx - 1; i++) 
+    for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
     }
     cursor1 = cursorB1->next;
-    cursorAf1 = cursor1->next; 
+    cursorAf1 = cursor1->next;
 
-    for (int i = 0; i < secondIdx - 1; i++) 
+    for (int i = 0; i < secondIdx - 1; i++)
     {
         cursorB2 = cursorB2->next;
     }
@@ -423,7 +422,6 @@ void SLL<type>::swap (int firstIdx, int secondIdx)
     cursor1->next = cursorAf2;
 }
 
-
 template <typename type>
 void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
 {
@@ -438,7 +436,7 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     node<type>* cursor2 = this->head;
     node<type>* cursorAf2 = nullptr;
 
-    for (int i = 0; i < secondIdx; i++) 
+    for (int i = 0; i < secondIdx; i++)
     {
         cursor2 = cursor2->next;
     }
@@ -447,17 +445,18 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     if (firstIdx == 0)
     {
         cursor1 = this->head;
-        this->head = cursor2;  
+        this->head = cursor2;
         cursor2->next = cursor1;
         cursor1->next = cursorAf2;
-        return; 
+        return;
     }
 
     // Making cursor1 pointing at "firstIdx" by incrementing it by (firstIdx), 'cause the cursor poiting at the head in the intial state
-    for (int i = 0; i < firstIdx - 1; i++) 
+    for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
     }
+    cursor1 = cursorB1->next;
     cursor1 = cursorB1->next;
 
     this->print();
@@ -473,22 +472,22 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
 }
 
 template <typename type>
-void SLL<type>::swap (int Idx)
+void SLL<type>::swap(int Idx)
 {
-    node<type>* cursor1 = this->head;
-    node<type>* cursorAf1 = cursor1->next;
+    node<type> *cursor1 = this->head;
+    node<type> *cursorAf1 = cursor1->next;
 
-    node<type>* cursorB2 = this->head;
-    node<type>* cursor2 = nullptr;
-    node<type>* cursorAf2 = nullptr;
-    
-    for (int i = 0; i < Idx - 1; i++) 
+    node<type> *cursorB2 = this->head;
+    node<type> *cursor2 = nullptr;
+    node<type> *cursorAf2 = nullptr;
+
+    for (int i = 0; i < Idx - 1; i++)
     {
         cursorB2 = cursorB2->next;
     }
     cursor2 = cursorB2->next;
-    cursorAf2 = cursor2->next; 
-    
+    cursorAf2 = cursor2->next;
+
     this->head = cursor2;
 
     cursor2->next = cursorAf1;
@@ -706,7 +705,6 @@ type SLL<type>::retrieveAt(int index)
     if (size <= index)
     {
         throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
-
     }
     node<type> *ptr = head;
     int counter = 0;
@@ -798,7 +796,7 @@ struct D_node
     D_node(type element) : element(element) {}
 };
 
-// **Doubly Linked List
+// Double Linked List
 template <typename type>
 class DLL
 {
@@ -828,6 +826,7 @@ public:
     void reverse();
     void forwardTraversal();
     void backwardTraversal();
+    void swap(int firstItemIdx, int secondItemIdx);
 };
 template <typename type>
 void DLL<type>::insertAfter(D_node<type> *prev_node, int data)
@@ -1109,16 +1108,92 @@ void DLL<type>::backwardTraversal()
     }
     cout << head->element << endl;
 }
+template <typename type>
+void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
+{
+    if (firstItemIdx < 0 || secondItemIdx < 0 || firstItemIdx >= size || secondItemIdx >= size)
+        throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
+    if (firstItemIdx == secondItemIdx)
+    {
+        throw std::invalid_argument("Can't swap the same node with itself");
+    }
+    D_node<type> *firstNode = head;
+    for (int i = 0; i < firstItemIdx; i++)
+    {
+        firstNode = firstNode->next;
+    }
 
+    D_node<type> *secondNode = head;
+    for (int i = 0; i < secondItemIdx; i++)
+    {
+        secondNode = secondNode->next;
+    }
+    // Swap previous and next pointers
+    std::swap(firstNode->prev, secondNode->prev);
+    std::swap(firstNode->next, secondNode->next);
 
-// **circular linked list
-template<typename type>
-class circularSLL{
-    private:
+    // Update prev pointers of adjacent nodes
+    if (firstNode->prev != nullptr)
+        firstNode->prev->next = firstNode;
+
+    if (secondNode->prev != nullptr)
+        secondNode->prev->next = secondNode;
+
+    // Update prev pointers of adjacent nodes
+    if (firstNode->next != nullptr)
+        firstNode->next->prev = firstNode;
+
+    if (secondNode->next != nullptr)
+        secondNode->next->prev = secondNode;
+
+    // if it's the head pointer
+    if (firstNode == head)
+        head = secondNode; // now head is the second node
+
+    else if (secondNode == head) // using else if here to prevent the previous condition
+                                 // as the previous condition make this condition always true
+        head = firstNode;
+
+    // if it's the tail pointer
+    if (tail == firstNode)
+        tail = secondNode; // now tail is the second node
+
+    else if (tail == secondNode) // using else if here to prevent the previous condition
+                                 // as the previous condition make this condition always true
+        tail = firstNode;
+}
+
+int main()
+{
+    DLL<int> list;
+    list.insertAtHead(10); // 0
+    list.insertAtTail(20); // 1
+    list.insertAtTail(30); // 2
+    list.insertAtTail(40); // 3
+    list.insertAtTail(50); // 4
+
+    std::cout << "Before swapping: ";
+    list.forwardTraversal();
+
+    list.swap(0, 2);
+
+    std::cout << "After swapping: ";
+    list.forwardTraversal();
+
+    return 0;
+}
+
+// Circular Linked List
+template <typename type>
+class circularSLL
+{
+private:
     int length;
     node<type> *head, *tail;
-    public:
-    circularSLL(){
+
+public:
+    circularSLL()
+    {
         clear();
     }
     int linkedListSize();
@@ -1126,7 +1201,7 @@ class circularSLL{
     void clear();
     void insertAtHead(type ele);
     void insertAtTail(type ele);
-    void insertInMiddle(type ele,int index);
+    void insertInMiddle(type ele, int index);
     void removeHead();
     void removeTail();
     void removeAt(int index);
@@ -1136,63 +1211,80 @@ class circularSLL{
     bool isItemAtEqual(type ele, int index);
     void print();
 };
-template<typename type>
-int circularSLL<type>::linkedListSize(){
+template <typename type>
+int circularSLL<type>::linkedListSize()
+{
     return length;
 }
-template<typename type>
-bool circularSLL<type>::isEmpty(){
+template <typename type>
+bool circularSLL<type>::isEmpty()
+{
     return (length == 0);
 }
-template<typename type>
-void circularSLL<type>::clear(){
+template <typename type>
+void circularSLL<type>::clear()
+{
     tail = head = nullptr;
-    length  = 0;
+    length = 0;
 }
-template<typename type>
-void circularSLL<type>::insertAtHead(type ele){
+template <typename type>
+void circularSLL<type>::insertAtHead(type ele)
+{
     node<type> *newNode = new node<type>(ele);
-    if(head == nullptr){
-        head = tail =  newNode;
+    if (head == nullptr)
+    {
+        head = tail = newNode;
         // tail = newNode;
         newNode->next = head;
     }
-    else{
+    else
+    {
         newNode->next = head;
         head = newNode;
         tail->next = head;
     }
     length++;
 }
-template<typename type>
-void circularSLL<type>::insertAtTail(type ele){
+template <typename type>
+void circularSLL<type>::insertAtTail(type ele)
+{
     node<type> *newNode = new node<type>(ele);
-    if(head == nullptr){
+    if (head == nullptr)
+    {
         head = newNode;
         tail = newNode;
-    }else{
+    }
+    else
+    {
         tail->next = newNode;
         newNode->next = head;
         tail = newNode;
     }
     length++;
 }
-template<typename type>
-void circularSLL<type>::insertInMiddle(type ele,int index){
-    if(index > length || index < 0){
+template <typename type>
+void circularSLL<type>::insertInMiddle(type ele, int index)
+{
+    if (index > length || index < 0)
+    {
         throw std::out_of_range("\n\t\t\tOut of bounds\n");
     }
-    else{
+    else
+    {
         node<type> *newNode = new node<type>(ele);
-        if(index == 0){
+        if (index == 0)
+        {
             insertAtHead(ele);
         }
-        else if(index == length) {
+        else if (index == length)
+        {
             insertAtTail(ele);
         }
-        else{
+        else
+        {
             node<type> *ptr = head;
-            for(int i = 1; i < index; i++){
+            for (int i = 1; i < index; i++)
+            {
                 ptr = ptr->next;
             }
             newNode->next = ptr->next;
@@ -1201,15 +1293,20 @@ void circularSLL<type>::insertInMiddle(type ele,int index){
         }
     }
 }
-template<typename type>
-void circularSLL<type>::removeHead(){
-    if(length == 0){
+template <typename type>
+void circularSLL<type>::removeHead()
+{
+    if (length == 0)
+    {
         throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
-    }else if(length == 1){
+    }
+    else if (length == 1)
+    {
         delete head;
         head = tail = NULL;
     }
-    else{
+    else
+    {
         node<type> *ptr = head;
         head = ptr->next;
         tail->next = head;
@@ -1217,19 +1314,25 @@ void circularSLL<type>::removeHead(){
     }
     length--;
 }
-template<typename type>
-void circularSLL<type>::removeTail(){
-    if(length == 0){
+template <typename type>
+void circularSLL<type>::removeTail()
+{
+    if (length == 0)
+    {
         throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
-    }else if(length == 1){
+    }
+    else if (length == 1)
+    {
         delete head;
         head = tail = NULL;
     }
-    else{
+    else
+    {
         node<type> *cur = head->next;
         node<type> *pre = head;
         int counter = length;
-        while(counter > 1){
+        while (counter > 1)
+        {
             pre = cur;
             cur = cur->next;
             counter--;
@@ -1241,50 +1344,63 @@ void circularSLL<type>::removeTail(){
     }
     length--;
 }
-template<typename type>
-void circularSLL<type>::removeAt(int index){
-    if(length == 0){
+template <typename type>
+void circularSLL<type>::removeAt(int index)
+{
+    if (length == 0)
+    {
         throw std::out_of_range("\n\t\t\t*** Empty linked list ***\n");
     }
     if (index >= length)
     {
         throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
     }
-    if(index == 0){
+    if (index == 0)
+    {
         removeHead();
         return;
-    }else if(index == length-1){
+    }
+    else if (index == length - 1)
+    {
         removeTail();
         return;
     }
-    else{
-        node<type>*cur = head->next;
-        node<type>* pre = head;
-        for(int i = 1;i < index;i++){
+    else
+    {
+        node<type> *cur = head->next;
+        node<type> *pre = head;
+        for (int i = 1; i < index; i++)
+        {
             pre = cur;
             cur = cur->next;
         }
-        if(cur == tail){
+        if (cur == tail)
+        {
             tail = cur;
             tail->next = head;
         }
-        else pre->next = cur->next;
-            // cout << tail->next->element << " " << head->element << endl;
+        else
+            pre->next = cur->next;
+        // cout << tail->next->element << " " << head->element << endl;
     }
     length--;
 }
-template<typename type>
-type circularSLL<type>::retrieveAt(int index){
+template <typename type>
+type circularSLL<type>::retrieveAt(int index)
+{
     // zero based
     type e;
-    if(length <= index){
+    if (length <= index)
+    {
         throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
     }
-    node<type>* ptr = head;
+    node<type> *ptr = head;
     int counter = 0;
     int count = length;
-    while(count){
-        if(counter == index){
+    while (count)
+    {
+        if (counter == index)
+        {
             e = ptr->element;
             break;
         }
@@ -1294,17 +1410,21 @@ type circularSLL<type>::retrieveAt(int index){
     }
     return e;
 }
-template<typename type>
-void circularSLL<type>::replaceAt(type ele, int index){
+template <typename type>
+void circularSLL<type>::replaceAt(type ele, int index)
+{
     // zero based
-    if(length <= index){
-       throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
+    if (length <= index)
+    {
+        throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
     }
-    node<type>* ptr = head;
+    node<type> *ptr = head;
     int counter = 0;
     int count = length;
-    while(count){
-        if(counter == index){
+    while (count)
+    {
+        if (counter == index)
+        {
             ptr->element = ele;
             break;
         }
@@ -1313,13 +1433,16 @@ void circularSLL<type>::replaceAt(type ele, int index){
         ptr = ptr->next;
     }
 }
-template<typename type>
-bool circularSLL<type>::isExit(type ele){
+template <typename type>
+bool circularSLL<type>::isExit(type ele)
+{
     // zero based
-    node<type>* ptr = head;
+    node<type> *ptr = head;
     int counter = length;
-    while(counter){
-        if(ptr->element == ele){
+    while (counter)
+    {
+        if (ptr->element == ele)
+        {
             return true;
         }
         counter--;
@@ -1327,16 +1450,21 @@ bool circularSLL<type>::isExit(type ele){
     }
     return false;
 }
-template<typename type>
-bool circularSLL<type>::isItemAtEqual(type ele, int index){
-    if(index >= length){
+template <typename type>
+bool circularSLL<type>::isItemAtEqual(type ele, int index)
+{
+    if (index >= length)
+    {
         throw std::out_of_range("\n\t\t\t*** Out of bound ***\n");
     }
-    node<type>* ptr = head;
+    node<type> *ptr = head;
     int counter = 0, size = length;
-    while(size){
-        if(counter == index){
-            if(ptr->element == ele)return true;
+    while (size)
+    {
+        if (counter == index)
+        {
+            if (ptr->element == ele)
+                return true;
         }
         counter++;
         size--;
@@ -1344,16 +1472,20 @@ bool circularSLL<type>::isItemAtEqual(type ele, int index){
     }
     return false;
 }
-template<typename type>
-void circularSLL<type>::print(){
-    node<type>* ptr = head;
+template <typename type>
+void circularSLL<type>::print()
+{
+    node<type> *ptr = head;
     int counter = length;
-    while(counter){
-        if(counter == 1){
-            cout << ptr->element << endl;;
+    while (counter)
+    {
+        if (counter == 1)
+        {
+            cout << ptr->element << endl;
+            ;
             break;
         }
-        cout << ptr->element <<  "->";
+        cout << ptr->element << "->";
         ptr = ptr->next;
         counter--;
     }

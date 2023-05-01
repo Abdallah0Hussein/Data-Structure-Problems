@@ -431,6 +431,7 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     {
         swap(firstIdx, secondIdx);
     }
+
     node<type>* cursorB1 = this->head;
     node<type>* cursor1 = nullptr;
     
@@ -457,15 +458,18 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     {
         cursorB1 = cursorB1->next;
     }
-    cursor1= cursorB1->next;
+    cursor1 = cursorB1->next;
 
-    cout << cursorB1->next->next->element << endl;
+    this->print();
     cursorB1->next = cursor2;
-    //cout << cursorB1->next->next->element << endl;
+    this->print();
+    cout << cursor1->element << endl;
     cursor2->next = cursor1;
-    cout << cursor2->next->element << endl;
+    cout << cursor1->element << endl;
     cursor1->next = cursorAf2;
- //   cout << cursorB1->next->next->element<< endl;
+    this->print();
+    cout << cursor1->element << endl;
+
 }
 
 template <typename type>

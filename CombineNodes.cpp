@@ -22,7 +22,7 @@ int main()
   list.print();
   cout << "\n-------------------------\n";
   newList.print();
-  
+  cout << "\n-------------------------\n";
   SLL<int> list2;
   list2.insertAtTail(0);
   list2.insertAtTail(1);
@@ -31,7 +31,7 @@ int main()
   list2.insertAtTail(4);
 
   list2.swap(3, 4);
-  list2.print();
+  //list2.print();
 }
 
 // Take the original linked list head and combine its the nodes between zeros into the newList

@@ -339,6 +339,7 @@ private:
     // Swap first node with Idx's node
     void swap(int Idx);
     void adjacentSwap(int firstIdx, int secondIdx);
+
 public:
     node<type> *head, *tail;
     SLL()
@@ -411,11 +412,10 @@ void SLL<type>::swap(int firstIdx, int secondIdx)
     // Pointer to the next(After) node of secondIdx node
     node<type> *cursorAf2 = nullptr;
 
-
     /*
         Making cursorB1 pointing at "firstIdx - 1" node by incrementing it by (firstIdx - 1),
         'cause the cursorB1 poiting at the head in the intial state
-    */ 
+    */
     for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
@@ -435,7 +435,7 @@ void SLL<type>::swap(int firstIdx, int secondIdx)
     /*
     Swapping nodes by change the Back(previous) and After(next) nodes
     of the firstIdx node with the Back(previous) and After(next) nodes of secondIdx node
-    */  
+    */
     cursorB1->next = cursor2;
     cursor2->next = cursorAf1;
     cursorB2->next = cursor1;
@@ -446,33 +446,33 @@ void SLL<type>::swap(int firstIdx, int secondIdx)
     {
         tail = cursor1;
     }
-    else if(cursor2->next == NULL)
+    else if (cursor2->next == NULL)
     {
         tail = cursor2;
-    } 
+    }
 }
 
 template <typename type>
 void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
 {
     /*
-        If the first Index was higher than the second Index 
+        If the first Index was higher than the second Index
         Then swapping the values to make it easy to swap nodes
-    */ 
+    */
     if (firstIdx > secondIdx)
     {
         swap(firstIdx, secondIdx);
     }
 
-/* 
---  Here we need only cursor to the previous node of the firstIdx node 
---  And a cursor to the next node of secondIdx node, 'cause the two nodes are adjacent
-*/
-    node<type>* cursorB1 = this->head;
-    node<type>* cursor1 = nullptr;
-    
-    node<type>* cursor2 = this->head;
-    node<type>* cursorAf2 = nullptr;
+    /*
+    --  Here we need only cursor to the previous node of the firstIdx node
+    --  And a cursor to the next node of secondIdx node, 'cause the two nodes are adjacent
+    */
+    node<type> *cursorB1 = this->head;
+    node<type> *cursor1 = nullptr;
+
+    node<type> *cursor2 = this->head;
+    node<type> *cursorAf2 = nullptr;
 
     for (int i = 0; i < secondIdx; i++)
     {
@@ -483,17 +483,17 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     // Checking if the firstIdx node (remember: firstIdxit is the lower index now) is first (head) node or not
     if (firstIdx == 0)
     {
-    /*
-    -- Swapping the head node with secondIdx node by making the head pointer points at the second node and first node poiting at the third node
-    -- and the second node poiting at first node 
-    */ 
+        /*
+        -- Swapping the head node with secondIdx node by making the head pointer points at the second node and first node poiting at the third node
+        -- and the second node poiting at first node
+        */
         cursor1 = this->head;
         this->head = cursor2;
         cursor2->next = cursor1;
         cursor1->next = cursorAf2;
         return;
     }
-    //Else Intialize the previous node of secondIdx node
+    // Else Intialize the previous node of secondIdx node
     for (int i = 0; i < firstIdx - 1; i++)
     {
         cursorB1 = cursorB1->next;
@@ -513,7 +513,7 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     if (cursor1->next == NULL)
     {
         tail = cursor1;
-    } 
+    }
 }
 
 template <typename type>
@@ -536,8 +536,8 @@ void SLL<type>::swap(int Idx)
 
     /*
     -- Swapping the head node with secondIdx node by making the head pointer points at the second node and first node poiting at the next node of the Idx node
-    -- and the Idx node poiting at first node 
-    */ 
+    -- and the Idx node poiting at first node
+    */
     this->head = cursor2;
     cursor2->next = cursorAf1;
     cursorB2->next = cursor1;
@@ -1181,23 +1181,24 @@ void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
     {
         secondNode = secondNode->next;
     }
-    // Swap previous and next pointers
-    std::swap(firstNode->next, secondNode->next);
-    std::swap(firstNode->prev, secondNode->prev);
 
     // Update prev pointers of adjacent nodes
     if (firstNode->prev != nullptr)
-        firstNode->prev->next = firstNode;
+        firstNode->prev->next = secondNode;
 
     if (secondNode->prev != nullptr)
-        secondNode->prev->next = secondNode;
+        secondNode->prev->next = firstNode;
 
     // Update prev pointers of adjacent nodes
     if (firstNode->next != nullptr)
-        firstNode->next->prev = firstNode;
+        firstNode->next->prev = secondNode;
 
     if (secondNode->next != nullptr)
-        secondNode->next->prev = secondNode;
+        secondNode->next->prev = firstNode;
+
+    // Swap previous and next pointers
+    std::swap(firstNode->prev, secondNode->prev);
+    std::swap(firstNode->next, secondNode->next);
 
     // if it's the head pointer
     if (firstNode == head)
@@ -1228,7 +1229,7 @@ int main()
     std::cout << "Before swapping: ";
     list.forwardTraversal();
 
-    list.swap(2, 4);
+//     list.swap(1, 2);
 
     std::cout << "After swapping: ";
     list.backwardTraversal();

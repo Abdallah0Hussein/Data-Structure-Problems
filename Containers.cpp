@@ -461,7 +461,7 @@ void SLL<type>::adjacentSwap(int firstIdx, int secondIdx)
     */
     if (firstIdx > secondIdx)
     {
-        swap(firstIdx, secondIdx);
+        std::swap(firstIdx, secondIdx);
     }
 
     /*
@@ -1164,12 +1164,19 @@ void DLL<type>::backwardTraversal()
 template <typename type>
 void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
 {
+    
     if (firstItemIdx < 0 || secondItemIdx < 0 || firstItemIdx >= size || secondItemIdx >= size)
         throw std::out_of_range("\n\t\t\t*** Out Of bounds ***\n");
     if (firstItemIdx == secondItemIdx)
     {
         throw std::invalid_argument("Can't swap the same node with itself");
     }
+
+    if (firstItemIdx > secondItemIdx)
+    {
+        std::swap(firstItemIdx, secondItemIdx);
+    }
+
     D_node<type> *firstNode = head;
     for (int i = 0; i < firstItemIdx; i++)
     {
@@ -1182,23 +1189,43 @@ void DLL<type>::swap(int firstItemIdx, int secondItemIdx)
         secondNode = secondNode->next;
     }
 
-    // Update prev pointers of adjacent nodes
-    if (firstNode->prev != nullptr)
-        firstNode->prev->next = secondNode;
+    if (abs(firstItemIdx - secondItemIdx) != 1)
+    {
 
-    if (secondNode->prev != nullptr)
-        secondNode->prev->next = firstNode;
+        // Update prev pointers of adjacent nodes
+        if (firstNode->prev != nullptr)
+            firstNode->prev->next = secondNode;
 
-    // Update prev pointers of adjacent nodes
-    if (firstNode->next != nullptr)
-        firstNode->next->prev = secondNode;
+        if (secondNode->prev != nullptr)
+            secondNode->prev->next = firstNode;
 
-    if (secondNode->next != nullptr)
-        secondNode->next->prev = firstNode;
+        // Update prev pointers of adjacent nodes
+        if (firstNode->next != nullptr)
+            firstNode->next->prev = secondNode;
 
-    // Swap previous and next pointers
-    std::swap(firstNode->prev, secondNode->prev);
-    std::swap(firstNode->next, secondNode->next);
+        if (secondNode->next != nullptr)
+            secondNode->next->prev = firstNode;
+
+        // Swap previous and next pointers
+        std::swap(firstNode->prev, secondNode->prev);
+        std::swap(firstNode->next, secondNode->next);
+    }
+    else
+    {
+        // Update prev pointers of adjacent nodes
+        if (firstNode->prev != nullptr)
+            firstNode->prev->next = secondNode;
+
+        if (secondNode->next != nullptr)
+            secondNode->next->prev = firstNode;
+
+        firstNode->next = secondNode->next;
+        secondNode->next = firstNode;
+        
+
+        secondNode->prev = firstNode->prev;
+        firstNode->prev = secondNode;
+    }
 
     // if it's the head pointer
     if (firstNode == head)
@@ -1226,14 +1253,15 @@ int main()
     list.insertAtTail(40); // 3
     list.insertAtTail(50); // 4
 
-    std::cout << "Before swapping: ";
+    cout << "Before swapping: ";
     list.forwardTraversal();
 
-//     list.swap(1, 2);
+    list.swap(1, 1);
 
-    std::cout << "After swapping: ";
+    cout << "After swapping: ";
+    list.forwardTraversal();
+    cout << endl;
     list.backwardTraversal();
-
     return 0;
 }
 
